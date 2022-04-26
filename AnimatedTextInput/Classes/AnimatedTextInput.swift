@@ -556,9 +556,9 @@ extension AnimatedTextInput: TextInputDelegate {
     }
 
     open func textInputDidChange(textInput: TextInput) {
-        updateCounter()
         sendActions(for: .editingChanged)
         delegate?.animatedTextInputDidChange?(animatedTextInput: self)
+        updateCounter()
     }
 
     open func textInput(textInput: TextInput, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
