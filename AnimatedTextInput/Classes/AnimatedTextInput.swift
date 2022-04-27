@@ -323,12 +323,11 @@ open class AnimatedTextInput: UIControl {
         invalidateIntrinsicContentSize()
     }
 
-    fileprivate func updateCounter(color: UIColor) {
+    fileprivate func updateCounter() {
         guard let counterText = counterLabel.text else { return }
         let components = counterText.components(separatedBy: "/")
         let characters = (text != nil) ? text!.count : 0
         counterLabel.text = "\(characters)/\(components[1])"
-        counterLabel.textColor = color
     }
 
     // mark: States and animations
@@ -355,7 +354,7 @@ open class AnimatedTextInput: UIControl {
                                  foregroundColor: style.placeholderInactiveColor.cgColor,
                                  text: placeHolderText)
         lineView.animateToInitialState()
-        updateCounter(color: style.activeColor)
+        counterLabel.textColor = style.activeColor
     }
 
     fileprivate func configurePlaceholderAsErrorHint() {
@@ -364,7 +363,7 @@ open class AnimatedTextInput: UIControl {
                                  foregroundColor: style.errorColor.cgColor,
                                  text: placeholderErrorText)
         lineView.fillLine(with: style.errorColor)
-        updateCounter(color: style.errorColor)
+        counterLabel.textColor = style.errorColor
     }
 
     fileprivate func configurePlaceholderWith(fontSize: CGFloat, foregroundColor: CGColor, text: String?) {
@@ -559,9 +558,10 @@ extension AnimatedTextInput: TextInputDelegate {
     }
 
     open func textInputDidChange(textInput: TextInput) {
+        counterLabel.textColor = style.activeColor
         sendActions(for: .editingChanged)
         delegate?.animatedTextInputDidChange?(animatedTextInput: self)
-        updateCounter(color: style.activeColor)
+        updateCounter()
     }
 
     open func textInput(textInput: TextInput, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
